@@ -3,7 +3,7 @@ import os
 import random
 
 from discord.ext import commands
-from discord.ext.commands import Bot
+#from discord.ext.commands import Bot
 
 from dotenv import load_dotenv
 
@@ -15,6 +15,7 @@ bot = commands.Bot(command_prefix = '!')
 
 kingRoles = ["King", "Knight", "Bandit", "Bandit", "Assassin"]
 players = []
+gameArray = []
 gameStart = False
 
 @bot.event
@@ -47,18 +48,29 @@ async def _start(ctx):
       random.shuffle(kingRoles)
       random.shuffle(players)
       not gameStart
-      count = 0
-      for player in players:
-        await player.send("Your role is the " + kingRoles[count])
-        if(kingRoles[count] == "King"):
-          await ctx.send(players[count].name + " is the king!")
-        count += 1
+      for i in range(0, len(players)):
+        if(kingRoles[i] == "King"):
+          await ctx.send(players[i].mention + " is the king!")
+        else:
+          await players[i].send("Your role is the " + kingRoles[i])
+        gameArray.append([players[i], kingRoles[i]])
+      setTurnOrder()
   else:
     await ctx.send("Game in progress");
 
-#@bot.command(name = 'turnorder')
-#async def _turnorder(ctx):
+@bot.command(name = 'turnorder')
+async def _turnorder(ctx):
+  for i in range(0, len(gameArray)):
+    await ctx.send((i + 1) + ". " + gameArray[i].name)
 
+@bot.command(name = 'info')
+async def _info(ctx):
+  await ctx.send("Welcome to the Kingdom MTG bot! This bot is meant to make assigning kingdom roles much simpler for you.")
+  await ctx.send("Use the !join command to join the lobby for the game.")
+  await ctx.send("Use the !start command to assign everyone's roles.")
+  await ctx.send("Use the !turnorder command to see what the current turn order is in case you forget.")
+  await ctx.send("Use the !leave command to drop from the lobby.")
+  await ctx.send("Use the !clear command to reset the lobby.")
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
@@ -72,8 +84,18 @@ async def _leave(ctx):
 async def _cleargame(ctx):
   players.clear()
   kingRoles.remove("Ursurper")
+  gameArray.clear()
   await ctx.send("Cleared the lobby")
   if gameStart:
     not gameStart
+
+
+def setTurnOrder():
+  for i in range(0, len(gameArray)):
+    if(gameArray[i][0] == "King"):
+      gameArray.insert(0, gameArray.pop(i))
+    shuffleRestArray = gameArray[1:]
+    random.shuffle(shuffleRestArray)
+    gameArray[1:] = shuffleRestArray
 
 bot.run(token)
