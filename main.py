@@ -37,14 +37,14 @@ async def _join(ctx):
   
 @bot.command(name = 'start')
 async def _start(ctx):
-  if not gameStart:
-    if len(players) < 5:
-      await ctx.send("Cannot start the game! Not enough roles.")
-      return
-    elif len(players) > 6: 
-      await ctx.send("Too many players! Can't start.")
-      return
-    else:
+  #if not gameStart:
+    #if len(players) < 5:
+    #  await ctx.send("Cannot start the game! Not enough roles.")
+    #  return
+    #elif len(players) > 6: 
+    #  await ctx.send("Too many players! Can't start.")
+    #  return
+    #else:
       random.shuffle(kingRoles)
       random.shuffle(players)
       not gameStart
@@ -55,13 +55,13 @@ async def _start(ctx):
           await players[i].send("Your role is the " + kingRoles[i])
         gameArray.append([players[i], kingRoles[i]])
       setTurnOrder()
-  else:
-    await ctx.send("Game in progress");
+  #else:
+  #  await ctx.send("Game in progress");
 
 @bot.command(name = 'turnorder')
 async def _turnorder(ctx):
   for i in range(0, len(gameArray)):
-    await ctx.send((i + 1) + ". " + gameArray[i].name)
+    await ctx.send(str(i + 1) + ". " + gameArray[i][i].name)
 
 @bot.command(name = 'info')
 async def _info(ctx):
@@ -89,13 +89,12 @@ async def _cleargame(ctx):
   if gameStart:
     not gameStart
 
-
 def setTurnOrder():
   for i in range(0, len(gameArray)):
-    if(gameArray[i][0] == "King"):
+    if(gameArray[i][0][0] == "King"):
       gameArray.insert(0, gameArray.pop(i))
-    shuffleRestArray = gameArray[1:]
+    shuffleRestArray = gameArray[0:]
     random.shuffle(shuffleRestArray)
-    gameArray[1:] = shuffleRestArray
+    gameArray[0:] = shuffleRestArray
 
 bot.run(token)
