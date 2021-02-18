@@ -5,6 +5,12 @@ import random
 from discord.ext import commands
 from discord.ext.commands import Bot
 
+from dotenv import load_dotenv
+
+load_dotenv()
+token = os.getenv('TOKEN')
+client = discord.Client()
+
 bot = commands.Bot(command_prefix = '!')
 
 kingRoles = ["King", "Knight", "Bandit", "Bandit", "Assassin"]
@@ -70,4 +76,4 @@ async def _cleargame(ctx):
   if gameStart:
     not gameStart
 
-bot.run('ODExNzAzOTMzNzUxMTMyMjQw.YC2EMg.3rfneGUPPONuCh_1SJ92jlC__so')
+bot.run(token)
