@@ -24,16 +24,17 @@ async def on_ready():
 
 @bot.command(name = 'join')
 async def _join(ctx):
-  players.append(ctx.author)
-  #for player in players:
-    #await ctx.send(player.username)
-  if len(players) == 6:
-    kingRoles.append("Ursurper")
   for player in players:
     if player == ctx.author:
       await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
     else:
       await ctx.send("Welcome to the game!")
+  players.append(ctx.author)
+  #for player in players:
+    #await ctx.send(player.username)
+  if len(players) == 6:
+    kingRoles.append("Ursurper")
+  
   
 @bot.command(name = 'start')
 async def _start(ctx):
@@ -61,7 +62,7 @@ async def _start(ctx):
 @bot.command(name = 'turnorder')
 async def _turnorder(ctx):
   for i in range(0, len(gameArray)):
-    await ctx.send(str(i + 1) + ". " + gameArray[i][i].name)
+    await ctx.send(str(i + 1) + ". " + gameArray[i][0].name)
 
 @bot.command(name = 'info')
 async def _info(ctx):
@@ -70,7 +71,7 @@ async def _info(ctx):
   await ctx.send("Use the !start command to assign everyone's roles.")
   await ctx.send("Use the !turnorder command to see what the current turn order is in case you forget.")
   await ctx.send("Use the !leave command to drop from the lobby.")
-  await ctx.send("Use the !clear command to reset the lobby.")
+  await ctx.send("Use the !cleargame command to reset the lobby.")
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
@@ -82,19 +83,20 @@ async def _leave(ctx):
       
 @bot.command(name = 'cleargame')
 async def _cleargame(ctx):
-  players.clear()
-  kingRoles.remove("Ursurper")
   gameArray.clear()
+  players.clear()
+  if(len(kingRoles) == 6):
+    kingRoles.remove("Ursurper")
   await ctx.send("Cleared the lobby")
   if gameStart:
     not gameStart
 
 def setTurnOrder():
   for i in range(0, len(gameArray)):
-    if(gameArray[i][0][0] == "King"):
+    if(gameArray[i][1] == "King"):
       gameArray.insert(0, gameArray.pop(i))
-    shuffleRestArray = gameArray[0:]
-    random.shuffle(shuffleRestArray)
-    gameArray[0:] = shuffleRestArray
+  shuffleRestArray = gameArray[0:]
+  random.shuffle(shuffleRestArray)
+  gameArray[0:] = shuffleRestArray
 
 bot.run(token)
