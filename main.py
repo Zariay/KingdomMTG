@@ -3,7 +3,6 @@ import os
 import random
 
 from discord.ext import commands
-#from discord.ext.commands import Bot
 
 from dotenv import load_dotenv
 
@@ -22,6 +21,10 @@ gameStart = False
 async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
 
+@client.event
+async def on_guild_join(guild):
+  await guild.send("Thanks for adding me! Use !info for more info, and be sure to restrict me to the proper channel!")
+
 @bot.command(name = 'join')
 async def _join(ctx):
   for player in players:
@@ -38,14 +41,14 @@ async def _join(ctx):
   
 @bot.command(name = 'start')
 async def _start(ctx):
-  #if not gameStart:
-    #if len(players) < 5:
-    #  await ctx.send("Cannot start the game! Not enough roles.")
-    #  return
-    #elif len(players) > 6: 
-    #  await ctx.send("Too many players! Can't start.")
-    #  return
-    #else:
+  if not gameStart:
+    if len(players) < 5:
+      await ctx.send("Cannot start the game! Not enough roles.")
+      return
+    elif len(players) > 6: 
+      await ctx.send("Too many players! Can't start.")
+      return
+    else:
       random.shuffle(kingRoles)
       random.shuffle(players)
       not gameStart
@@ -56,8 +59,8 @@ async def _start(ctx):
           await players[i].send("Your role is the " + kingRoles[i])
         gameArray.append([players[i], kingRoles[i]])
       setTurnOrder()
-  #else:
-  #  await ctx.send("Game in progress");
+  else:
+    await ctx.send("Game in progress");
 
 @bot.command(name = 'turnorder')
 async def _turnorder(ctx):
