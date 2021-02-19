@@ -41,8 +41,7 @@ async def _join(ctx):
   if len(players) == 6:
     kingRoles.append("Usurper")
   
-  
-@bot.command(name = 'start')
+@bot.command(name = 'startgame')
 async def _start(ctx):
   if not gameStart:
     if len(players) < 5:
@@ -52,17 +51,7 @@ async def _start(ctx):
       await ctx.send("There are " + str(len(players)) + " players in the lobby. Cannot start game.")
       return
     else:
-      random.shuffle(kingRoles)
-      random.shuffle(players)
-      global gameStart
-      gameStart = not gameStart
-      for i in range(0, len(players)):
-        if(kingRoles[i] == "King"):
-          await ctx.send(players[i].mention + " is the king!")
-        else:
-          await players[i].send("Your role is the " + kingRoles[i])
-        gameArray.append([players[i], kingRoles[i]])
-      setTurnOrder()
+      startGame(ctx)
   else:
     await ctx.send("Game in progress");
 
@@ -71,15 +60,24 @@ async def _turnorder(ctx):
   for i in range(0, len(gameArray)):
     await ctx.send(str(i + 1) + ". " + gameArray[i][0].name)
 
+@bot.command(name = 'endgame')
+async def _endgame(ctx):
+  if gameStart:
+    global gameStart
+    gameStart = not gameStart
+    await ctx.send("Game has ended")
+
 @bot.command(name = 'info')
 async def _info(ctx):
   await ctx.send("Welcome to the Kingdom MTG bot! This bot is meant to make assigning kingdom roles much simpler for you.")
   await ctx.send("Use the !join command to join the lobby for the game.")
-  await ctx.send("Use the !start command to assign everyone's roles.")
+  await ctx.send("Use the !startgame command to assign everyone's roles.")
   await ctx.send("Use the !turnorder command to see what the current turn order is in case you forget.")
   await ctx.send("Use the !leave command to drop from the lobby.")
   await ctx.send("Use the !cleargame command to reset the lobby.")
   await ctx.send("Use the !roles command to remind yourself what each role is!")
+  await ctx.send("Use the !endgame command to end the current session.")
+  await ctx.send("Use the !reset command to restart a new game with the same people!")
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
@@ -115,13 +113,30 @@ async def _cleargame(ctx):
       global gameStart
       gameStart = not gameStart
 
+def startGame(ctx):
+  if(len(gameArray) > 0):
+    gameArray.clear()
+  random.shuffle(kingRoles)
+  random.shuffle(players)
+  global gameStart
+  gameStart = not gameStart
+  for i in range(0, len(players)):
+    if(kingRoles[i] == "King"):
+      await ctx.send(players[i].mention + " is the king!")
+    else:
+      await players[i].send("Your role is the " + kingRoles[i])
+    gameArray.append([players[i], kingRoles[i]])
+  setTurnOrder()
+
 def setTurnOrder():
+  
   for i in range(0, len(gameArray)):
     if(gameArray[i][1] == "King"):
       gameArray.insert(0, gameArray.remove(gameArray[i]))
   shuffleRestArray = gameArray[0:]
   random.shuffle(shuffleRestArray)
   gameArray[0:] = shuffleRestArray
+  shuffleRestArray.clear()
 
 keep_alive()
 bot.run(token)
