@@ -27,13 +27,14 @@ async def on_guild_join(guild):
 
 @bot.command(name = 'join')
 async def _join(ctx):
-  for player in players:
-    if player == ctx.author:
-      await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
-      return
-    else:
-      await ctx.send("Welcome to the game!")
-  players.append(ctx.author)
+  if(len(players) > 0):
+    for player in players:
+      if player == ctx.author:
+        await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
+        return
+  else:
+    await ctx.send("Welcome to the game!")
+    players.append(ctx.author)
   if len(players) == 6:
     kingRoles.append("Ursurper")
   
@@ -86,13 +87,16 @@ async def _leave(ctx):
       
 @bot.command(name = 'cleargame')
 async def _cleargame(ctx):
-  gameArray.clear()
-  players.clear()
-  if(len(kingRoles) == 6):
-    kingRoles.remove("Ursurper")
-  await ctx.send("Cleared the lobby")
-  if gameStart:
-    not gameStart
+  if(len(gameArray) == 0 and len(players) == 0):
+    await ctx.send("Lobby is empty")
+  else:
+    gameArray.clear()
+    players.clear()
+    if(len(kingRoles) == 6):
+      kingRoles.remove("Ursurper")
+    await ctx.send("Cleared the lobby")
+    if gameStart:
+      not gameStart
 
 def setTurnOrder():
   for i in range(0, len(gameArray)):
