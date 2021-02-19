@@ -30,11 +30,10 @@ async def _join(ctx):
   for player in players:
     if player == ctx.author:
       await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
+      return
     else:
       await ctx.send("Welcome to the game!")
   players.append(ctx.author)
-  #for player in players:
-    #await ctx.send(player.username)
   if len(players) == 6:
     kingRoles.append("Ursurper")
   
@@ -75,6 +74,7 @@ async def _info(ctx):
   await ctx.send("Use the !turnorder command to see what the current turn order is in case you forget.")
   await ctx.send("Use the !leave command to drop from the lobby.")
   await ctx.send("Use the !cleargame command to reset the lobby.")
+  await ctx.send("Use the !roles command to remind yourself what each role is!")
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
