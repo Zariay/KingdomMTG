@@ -3,7 +3,7 @@ import os
 import random
 
 from discord.ext import commands
-
+from keep_alive import keep_alive
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -102,4 +102,5 @@ def setTurnOrder():
   random.shuffle(shuffleRestArray)
   gameArray[0:] = shuffleRestArray
 
+keep_alive()
 bot.run(token)
