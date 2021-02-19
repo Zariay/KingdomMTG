@@ -29,15 +29,15 @@ async def on_guild_join(guild):
 async def _join(ctx):
   if(len(players) == 0):
     players.append(ctx.author)
+    await ctx.send("Starting a lobby.")
   else: 
-    for player in players:
-      if player != ctx.author:
-        await ctx.send("Welcome to the game!")
-        players.append(ctx.author)
-        return
-      else:
-        await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
-        return
+    if ctx.author not in players:
+      await ctx.send("Welcome to the game!")
+      players.append(ctx.author)
+      return
+    else:
+      await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
+      return
   if len(players) == 6:
     kingRoles.append("Usurper")
   
@@ -46,10 +46,10 @@ async def _join(ctx):
 async def _start(ctx):
   if not gameStart:
     if len(players) < 5:
-      await ctx.send("Cannot start the game! Not enough roles.")
+      await ctx.send("Cannot start the game! Not enough players. There are only " + str(len(players)) + " in the lobby so far.")
       return
     elif len(players) > 6: 
-      await ctx.send("Too many players! Can't start.")
+      await ctx.send("There are " + str(len(players)) + " in the lobby. Cannot start game.")
       return
     else:
       random.shuffle(kingRoles)
@@ -95,6 +95,11 @@ async def _roles(ctx):
   await ctx.send("Bandits: Only goal is to just kill the king.")
   await ctx.send("Assassin: They must kill everyone else before the king.")
   await ctx.send("Usurper: If they kill the King, they reset back to 50 life and become the new King.")
+
+  @bot.command(name = 'checklobby')
+  async def _checklobby(ctx):
+    for gamers in gameArray:
+      await ctx.send(gamers.name)
       
 @bot.command(name = 'cleargame')
 async def _cleargame(ctx):
