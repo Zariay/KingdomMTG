@@ -53,7 +53,7 @@ async def _start(ctx):
     else:
       startGame(ctx)
   else:
-    await ctx.send("Game in progress");
+    await ctx.send("Game in progress.");
 
 @bot.command(name = 'turnorder')
 async def _turnorder(ctx):
@@ -78,6 +78,7 @@ async def _info(ctx):
   await ctx.send("Use the !roles command to remind yourself what each role is!")
   await ctx.send("Use the !endgame command to end the current session.")
   await ctx.send("Use the !reset command to restart a new game with the same people!")
+  await ctx.send("Use the !checklobby command to see who is currently in the game lobby!")
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
@@ -129,7 +130,6 @@ def startGame(ctx):
   setTurnOrder()
 
 def setTurnOrder():
-  
   for i in range(0, len(gameArray)):
     if(gameArray[i][1] == "King"):
       gameArray.insert(0, gameArray.remove(gameArray[i]))
