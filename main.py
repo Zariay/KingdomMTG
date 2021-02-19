@@ -54,7 +54,8 @@ async def _start(ctx):
     else:
       random.shuffle(kingRoles)
       random.shuffle(players)
-      not gameStart
+      global gameStart
+      gameStart = not gameStart
       for i in range(0, len(players)):
         if(kingRoles[i] == "King"):
           await ctx.send(players[i].mention + " is the king!")
@@ -111,12 +112,13 @@ async def _cleargame(ctx):
       kingRoles.remove("Usurper")
     await ctx.send("Cleared the lobby")
     if gameStart:
-      not gameStart
+      global gameStart
+      gameStart = not gameStart
 
 def setTurnOrder():
   for i in range(0, len(gameArray)):
     if(gameArray[i][1] == "King"):
-      gameArray.insert(0, gameArray.pop(i))
+      gameArray.insert(0, gameArray.remove(gameArray[i]))
   shuffleRestArray = gameArray[0:]
   random.shuffle(shuffleRestArray)
   gameArray[0:] = shuffleRestArray
