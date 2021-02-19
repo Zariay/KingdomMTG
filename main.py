@@ -36,7 +36,7 @@ async def _join(ctx):
       await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
       players.remove(ctx.author)
   if len(players) == 6:
-    kingRoles.append("Ursurper")
+    kingRoles.append("Usurper")
   
   
 @bot.command(name = 'start')
@@ -84,6 +84,14 @@ async def _leave(ctx):
       players.remove(ctx.author)
     else:
       await ctx.send("You've already left.")
+
+@bot.command(name = 'roles')
+async def _roles(ctx):
+  await ctx.send("King: Starts with 50 life. Teams up with the Knight to defeat everyone else.")
+  await ctx.send("Knight: Teams with the King and does his best to protect him. Wins if the King wins as well, but also loses if the King loses.")
+  await ctx.send("Bandits: Only goal is to just kill the king.")
+  await ctx.send("Assassin: They must kill everyone else before the king.")
+  await ctx.send("Usurper: If they kill the King, they reset back to 50 life and become the new King.")
       
 @bot.command(name = 'cleargame')
 async def _cleargame(ctx):
@@ -93,7 +101,7 @@ async def _cleargame(ctx):
     gameArray.clear()
     players.clear()
     if(len(kingRoles) == 6):
-      kingRoles.remove("Ursurper")
+      kingRoles.remove("Usurper")
     await ctx.send("Cleared the lobby")
     if gameStart:
       not gameStart
