@@ -27,14 +27,14 @@ async def on_guild_join(guild):
 
 @bot.command(name = 'join')
 async def _join(ctx):
-  if(len(players) > 0):
-    for player in players:
-      if player == ctx.author:
-        await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
-        return
-  else:
-    await ctx.send("Welcome to the game!")
-    players.append(ctx.author)
+  players.append(ctx.author)
+  for player in players:
+    if player != ctx.author:
+      await ctx.send("Welcome to the game!")
+      return
+    else:
+      await ctx.send("You've already joined. No need to rejoin again, just wait for more players.")
+      players.remove(ctx.author)
   if len(players) == 6:
     kingRoles.append("Ursurper")
   
