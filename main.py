@@ -46,10 +46,10 @@ async def _join(ctx):
 async def _start(ctx):
   if not gameStart:
     if len(players) < 5:
-      await ctx.send("Cannot start the game! Not enough players. There are only " + str(len(players)) + " in the lobby so far.")
+      await ctx.send("Cannot start the game! Not enough players. There are (is) only " + str(len(players)) + " player(s) in the lobby so far.")
       return
     elif len(players) > 6: 
-      await ctx.send("There are " + str(len(players)) + " in the lobby. Cannot start game.")
+      await ctx.send("There are " + str(len(players)) + " players in the lobby. Cannot start game.")
       return
     else:
       random.shuffle(kingRoles)
@@ -82,11 +82,10 @@ async def _info(ctx):
 
 @bot.command(name = 'leave')
 async def _leave(ctx):
-  for player in players:
-    if player == ctx.author:
-      players.remove(ctx.author)
-    else:
-      await ctx.send("You've already left.")
+  if ctx.author in players:
+    players.remove(ctx.author)
+  else:
+    await ctx.send("You've already left.")
 
 @bot.command(name = 'roles')
 async def _roles(ctx):
