@@ -16,6 +16,7 @@ kingRoles = ["King", "Knight", "Bandit", "Bandit", "Assassin"]
 players = []
 gameArray = []
 gameStart = False
+kingdomGame = {}
 
 @bot.event
 async def on_ready():
