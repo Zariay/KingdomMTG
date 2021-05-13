@@ -77,7 +77,7 @@ async def _info(ctx):
   await ctx.send("Welcome to the Kingdom MTG bot! This bot is meant to make assigning kingdom roles much simpler for you.")
   await ctx.send("Use the !join command to join the lobby for the game.")
   await ctx.send("Use the !start command to assign everyone's roles.")
-  await ctx.send("Use the !turnorder command to see what the current turn order is in case you forget.")
+  await ctx.send("Use the !turnorder command to see what they turn order is in case you forget.")
   await ctx.send("Use the !leave command to drop from the lobby.")
   await ctx.send("Use the !cleargame command to reset the lobby.")
   await ctx.send("Use the !roles command to remind yourself what each role is!")
@@ -120,7 +120,6 @@ def setTurnOrder():
   for i in range(0, len(gameArray)):
     if(gameArray[i][1] == "King"):
       gameArray.insert(0, gameArray.pop(i))
-      print(gameArray[i][0].name)
   shuffleRestArray = gameArray[0:]
   random.shuffle(shuffleRestArray)
   gameArray[0:] = shuffleRestArray
