@@ -42,7 +42,6 @@ async def _join(ctx):
   if len(players) == 6:
     kingRoles.append("Usurper")
   
-  
 @bot.command(name = 'start')
 async def _start(ctx):
   global gameStart
@@ -63,7 +62,13 @@ async def _start(ctx):
         else:
           await players[i].send("Your role is the " + kingRoles[i])
         gameArray.append([players[i], kingRoles[i]])
-      setTurnOrder()
+      for i in range(0, len(gameArray)):
+        if(gameArray[i][1] == "King"):
+          gameArray.insert(0, gameArray.pop(i))
+      shuffleRestArray = gameArray[1:]
+      random.shuffle(shuffleRestArray)
+      gameArray[1:] = shuffleRestArray
+      ctx.invoke(bot.get_command('turnorder'))
   else:
     await ctx.send("Game in progress");
 
@@ -115,14 +120,6 @@ async def _cleargame(ctx):
     await ctx.send("Cleared the lobby")
     if not gameStart:
       gameStart = not gameStart
-
-def setTurnOrder():
-  for i in range(0, len(gameArray)):
-    if(gameArray[i][1] == "King"):
-      gameArray.insert(0, gameArray.pop(i))
-  shuffleRestArray = gameArray[0:]
-  random.shuffle(shuffleRestArray)
-  gameArray[0:] = shuffleRestArray
 
 keep_alive()
 bot.run(token)
